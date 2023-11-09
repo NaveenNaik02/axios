@@ -1,0 +1,65 @@
+import React, { useState } from "react";
+import axios, { AxiosError } from "axios";
+
+const url = "https://course-api.com/axios-tutorial-post";
+type InputType = React.ChangeEvent<HTMLInputElement>;
+
+const PostRequest = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(url, {
+        name,
+        email,
+      });
+      console.log(res.data);
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError;
+      if (axiosError.response?.data) {
+        console.log("Error response data", axiosError.response.data);
+      } else {
+        console.log("Network error", axiosError.message);
+      }
+    }
+  };
+
+  return (
+    <section>
+      <h2 className="text-center">post request</h2>
+      <form action="" className="form" onSubmit={handleSubmit}>
+        <div className="form-row">
+          <label htmlFor="name" className="form-label">
+            name
+          </label>
+          <input
+            type="text"
+            className="form-input"
+            id="name"
+            value={name}
+            onChange={(e: InputType) => setName(e.target.value)}
+          />
+        </div>
+        <div className="form-row">
+          <label htmlFor="email" className="form-label">
+            email
+          </label>
+          <input
+            type="email"
+            className="form-input"
+            id="email"
+            value={email}
+            onChange={(e: InputType) => setEmail(e.target.value)}
+          />
+        </div>
+        <button type="submit" className="btn-bloc btn">
+          register
+        </button>
+      </form>
+    </section>
+  );
+};
+
+export default PostRequest;
